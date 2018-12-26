@@ -1,0 +1,444 @@
+FORTRAN 77 Accompanying Report
+Ocean Wong (Hoi Yeung Wong)
+MSc Physics and Technology of Nuclear Reactors
+2018-12-25
+
+1
+
+Formulation of the problem
+
+A flux profile of constant spacing is provided by the user. This represents the variation of
+neutron flux across the entire height of the reactor.
+The power (P ) produced per unit volume (V ) of fuel is then given as
+P
+= QF
+V
+
+(1)
+
+P
+= q 000 = QΣFf φ(z)
+(2)
+V
+= QNd σf φ(z)
+(3)
+NA ρ
+= QE
+σf φ(z)
+(4)
+A
+where the symbols has their usual meaning in nuclear engineering, but can also be found in
+Table 1. All of the above constants are computed in SI units.
+At thermal equilibrium, the temperature of the coolant must monotonically increase as it
+travels up the cooling channels; and the rate of increase of temperature must be proportional
+to the power produced by that particular section fuel pin between z and z + ∆z, which in turn
+is proportional to the flux at z. This is given by equation 5.
+Zz
+Af q 000 (z 0 ) 0
+dz
+(5)
+Tcool (z) =
+ṁCp
+0
+
+The temperature profile inside the fuel pin can then be inferred from the coolant temperature
+using equation 9 onwards.
+A program is needs to be written; the aim of this program is to find out this vertical
+temperature profile for the coolant, exterior of the cladding, and the maximum temperature of
+the fuel (closest to the centre point), print them to screen and save to file.
+
+1.1
+
+simplifications and justification
+
+The material characterstics (dimension of the reactor, Macroscopic cross-section of the fuel
+and other heat transfer constants) is assumed to remain constant with respect to temperature
+varaiation.
+This the error contribution from this assumption is expected to be relatively small, and and
+using this assumption reduces the complexity of the program significantly, so that the source
+code is more easily understood by other programmers, and it is less likely to make a mistake.
+The temperature variation is found using summation instead of integrating over the interpolated flux profile. (See Figure 1 and equation 5)
+Finally, as a disambiguation, the flux profile provided by the user is assumed to span the
+entire height of the reactor, 0 to zmax , inclusive of the boundary, so that the size must be And
+therefore it must have the o
+The error contribution from this simplification decreases as the number of flux values provided by the user increase (the spacing decreases).
+1
+
+Figure 1: The summation approach given by equation 7 is identical to dividing the flux profile
+into steps before integrating (equation 5 to find its effect on the temperature profile.
+
+2
+
+Approarch
+
+The program is modularized using SUBROUTINEs and FUNCTIONs. The layout is as follows:
+After printing some preliminary information about the program (authorship and purpose),
+ PrintProgramHeader()
+
+it prompts for an input of the file name (which has to be in the same directory as the
+executable .out file) from the user.
+ GetFileName(fileName)
+ ScanFlux(fileName, length, flux, arysize)
+
+(The program will exit if the file can be opened but cannot be read as floating point values,
+such that the user can change the content of the input file and re-run the program.)
+The values read from the file are stored in an array (of size 1023) in the main program.
+This sets an upper limit of 1023 to the number of values that can be provided by the input file
+(and therefore limits the spatial resolution in vertical flux profile).
+After ensuring that the file exist and is read without error, the function Init params
+prompts for the reactor type from the user, such that the proper parameters for the reactor
+can be chosen.
+ Init params(length)
+
+– GetReactorType()
+– AGRparameters(zmax ,ṁ,Cp ,hc ,Tin ,E,df ,dh ,Tc ,kc ,hg )
+– PWRparameters(zmax ,ṁ,Cp ,hc ,Tin ,E,df ,dh ,Tc ,kc ,hg )
+– UO2MaterialConstants(k f,Macroscopic,Q,E)
+
+2
+
+The parameters are then saved in COMMON blocks to be shared with other subroutines below.
+The number of flux values read from the input file (which is stored as the variable length) is
+needed to determine how many steps to divide the height of the reactor z into; and level of
+enrichment is required to calculate the Macroscopic cross-section for fission of the fuel.
+The program then appends " T output" after the input file’s name as the output file.
+ OutFileName(fileName)
+
+(i.e. if the input file is flux.txt, then the output file will be named flux T output.txt.)
+If a file of the same name as the output file already exist, an option is given to the user to
+either proceed to overwrite the file or stop the program, to prevent silent overwriting.
+The temperature at each height is then calculated using a DO loop, looping over all actively
+used values of flux.
+– IncrementHeight(z,z1)
+If there are only 101 values in the input file flux.txt, then it will only loop over the first
+101 elements in each array, with the exception of the two arrays z and Tcool, which will loop
+over the first 102 values of the arrays.
+This is because the subroutines for calculating the values of each element in these two arrays
+propagates the value upwards(calculates var1(i+1) from var1(i)) instead of laterally (calculates var2(i) from var1(i)).
+Therefore the sizes of these two arrays are of arysize+1=1024 to account of the edge case
+where length==arysize
+The corresponding temperature changes can then be calculated using these information.
+A q 000 (z)
+(where q”’ is a z-dependent variable given by equation 4) appears in
+Since the term f π
+every one of the equations,
+NA ρ
+Af q 000
+= (d2f − d2h )QE
+σf φ(z)
+π
+A
+
+(6)
+
+an array q lin over pi is allocated to store its values. It is named as such because q 000 Af = q 0
+which is the linear heat generation rate, i.e. heat produced per unit length of fuel pin:
+– LinearHeatGenOverPi(flux(i), q lin over pi(i))
+This, and the following subroutines, retrieve parameters for the reactor via common blocks.
+The definition of these parameters are listed in Table 2.
+The coolant temperature is then
+
+Tcool (z + ∆z) = Tcool (z) +
+
+
+Af q 000 (z)
+∆z
+π
+π
+ṁCp
+
+(7)
+
+which is calculated by the following subroutine using COMMON /Tcool/ dz, mdot, Cp
+A better approach is to take the average of the flux at z and z + ∆z
+
+Tcool (z + ∆z) = Tcool (z) +
+
+Af q 000 (z+∆z) 
+π
+
+2
+
++
+
+Af q 000 (z)  
+π
+
+π
+
+∆z
+ṁCp
+
+(8)
+
+This more accurately represents the temperature change of the coolant after travelling from z
+to ∆z; but to keep the program simple the former option was adopted, leading to the result:
+3
+
+– HeatCoolant(Ti,Ti1,qi)
+In a similar vein, the equation for calculating the temperature of various components and
+the associated subroutines to do the computation are listed below:
+Exterior of cladding:
+
+
+1
+Af q 000 (z)
+(9)
+Toc (z) = Tcool (z) +
+π
+hc dc
+calculated by the following subroutine with the aid of COMMON /Toc/ hc, dc
+– CoolCladding( Tcool(i),Tclado(i),q lin over pi(i))
+Interior of cladding:
+
+Tic (z) = Toc (z) +
+
+
+ 
+dc
+Af q 000 (z) 1
+ln
+π
+2kc
+df
+
+(10)
+
+calculated by the following subroutine with the aid of COMMON /Tic/ kc, ln d c over d f
+– CoolCladdingIn(Tclado(i),Tcladi(i),q lin over pi(i))
+Surface of fuel pellets:
+
+Tf o (z) = Tic (z) +
+
+
+Af q 000 (z)
+1
+π
+hg df
+
+(11)
+
+calculated by the following subroutine with the aid of COMMON /Tof/ hg, df
+– CoolFuel( Tcladi(i),Tfuelo(i),q lin over pi(i))
+Maximum temperature inside fuel (nearest to the centre):
+
+
+
+
+ 
+Af q 000 (z) 1
+Af q 000 (z) 1
+d2h
+df
+−
+Tf max (z) = Tof (z) +
+ln
+2
+2
+π
+4kf
+π
+2kf df − dh
+dh
+
+(12)
+
+where the last term → 0 as dh → 0, calculated by the following subroutine with the aid of
+COMMON /Tfmax/ kf, dh2 df2 dh2 ln df dh
+– FindHottest( Tfuelo(i), Tfmax(i),q lin over pi(i))
+The values of interest are printed to the screen as well as into the file as an extra line:
+– SaveTemps(z(i), Tcool(i),Tclado(i),Tfmax(i), o )
+After looping through all values, the file is closed, and the end time of the program is printed,
+ finished()
+
+and the program is exited.
+
+4
+
+3
+
+Error handling features
+
+The program may encounter user induced error in 4 locations:
+1. Prompting the user to input the file name (user input)
+2. Reading the file
+(a) If file contains unreadable lines
+(b) If file size is too big
+3. Prompting the user to input the reactor type.
+4. Saving the output file
+Which are handled as follows:
+1. Check that file exist; if not, prompt user to type in the file name again (loop infinitely
+until a correct file name is found)
+2. Exit the main program after:
+(a) printing the line number where there is an unrecognized character.
+(b) Print the size of the allocated memory, and printing the line number where memory
+overflow will occur.
+3. Check that the input is correct, if not ask user to try again (loop infinitely)
+4. If file exist, warn user and ask user whether to overwrite or not
+(a) if ’y’, resume to overwrite the old file with the new outputs.
+(b) if ’n’, exit the program
+
+4
+
+Portability of source code onto other machines
+
+This program was written on a Linux (Ubuntu 18.04.1 LTS) machine compiled by gfortran. It
+has been subsequently been tested again on a Scientific Linux 7.3 (Nitrogen).
+This source is expected to work across multiple platforms since:
+ Despite the use of many subroutines and functions, they are all kept in the same file, so
+the source code can be compiled on its own without dependance on other files/libraries.
+ No local file paths were specified
+ No special line ending (e.g. \r\t) were used.
+ The source code is written in FORTRAN 77 syntax, so it should be compilable on most
+platforms by any currently actively maintained FORTRAN compilers. (e.g. GFortran,
+which is available on macOS and Windows as well)
+
+5
+
+5
+
+Potential future improvements
+
+Currently the program takes any flux values, and calculate an output temperature, without
+checking whether these flux values are reasonable or not.
+The program makes some assumption about the material, i.e. it has temperature independent density, and the doppler coefficient =0. In a real reactor, the fuel should expand and be
+less susceptible to fission by thermal neutrons, so this should be taken into account in a more
+advanced version of the program.
+A more advanced version of this program may check for negative values in the input file’s
+flux values, which is unphysical. And if the appropriate data is found, such as the recrystallization temperature of the cladding, and safe operating temperature of UO2, the safe operating
+conditions can be found, so that the program can print a warning when the temperature goes
+over the safe limits.
+This program also exit upon encountering any non-floating point value lines. In the future,
+if one wishes to, this program can be improved upon by adding a functionality to skip over
+lines starting with ”#”, which typically denotes a header.
+It is also restricted to read a file below a certain size, arbitrarily chosen as 1023. This
+restriction can be lifted using some of the more recent FORTRAN syntax, e.g. with automatic
+object in later versions of FORTRAN, or with other language (e.g. Python). However, this is
+very difficult to achieve with FORTRAN 77, as size of the array needs to be known before any
+file reading operation begins. So while this limit can be easily edited in the source code (by
+editing the parameter arysize), this value will be fixed once the code is compiled. [1]
+Lastly, this program uses simple summation of the given flux value over the intervals of
+height. In the future, cubic spline can be used to obtain the flux value at any arbitrary height
+between any two data points; and then an integration over that can be carried out, such that
+the temperature profile can still be well approximated even when very few data points are
+provided by the user, increasing the ease of use.
+
+6
+
+Appendices
+symbol
+F
+Q
+φ(z)
+ΣFf
+
+name in
+program
+Q
+flux(i)
+Sigma mac
+/Macroscopic
+
+physical meaning
+
+SI unit
+
+reaction(fission) rate per volume
+m−3 s−1
+Q value of the reaction
+J(Joule)
+2200 ms−1 flux (thermal neutron flux) as a function of height m−2 s−1
+macroscopic fission cross section of the fuel (UO2 )
+m−1
+
+Nd
+σf
+
+sigma mic
+
+number density of 235 U
+microscopic fission cross section of UO2
+
+ρ
+E
+A
+
+rho
+E
+A
+
+density of UO2
+enrichment (fraction of 235 U)
+molar mass of UO2 (dependent on enrichment)
+
+m−3
+m2
+=1028 barns
+kgm−3
+1
+kg
+
+Table 1: Definitions of constants used in equation 1 to 4
+
+symbol
+zmax
+ṁ
+Cp
+hc
+Tin
+df
+dh
+tc
+kc
+hg
+dc
+
+name in program
+zmax
+mdot
+Cp
+hc
+Tin
+df
+dh
+Tc
+kc
+hg
+dc
+
+physical meaning
+Total height of channel
+Mass flow rate per channel
+Specific heat capacity of coolant
+Convective heat transfer coefficient
+Inlet coolant temperature
+Outer diameter of fuel pellet,
+Inner diameter of fuel pellet,
+Thickness of cladding
+Thermal conductivity of cladding,
+Gap conductance, h g
+Outer diameter of cladding
+
+SI unit
+m
+kgs−1
+Jkg −1 K −1
+Wm−2 K −1
+°C
+m
+m
+m
+W m−1 K −1
+Wm−2 K −1
+m
+
+Table 2: Definitions of constants used from equation 6 to 12
+
+References
+[1] Ibm.com. (2018). IBM Knowledge Center. [online] Available at: https://www.ibm.com/
+support/knowledgecenter/SSGH4D_13.1.0/com.ibm.xlf131.aix.doc/language_ref/
+autoobj.html [Accessed 26 Dec. 2018].
+
+7
+
+

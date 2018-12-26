@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.10.14)  26 DEC 2018 19:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.10.14)  26 DEC 2018 20:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -223,11 +223,27 @@ Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
 \Urlmuskip=\muskip11
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2016/05/22 v1.7-166 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 67.
+\captionmargin=\dimen122
+\captionmargin@=\dimen123
+\captionwidth=\dimen124
+\caption@tempdima=\dimen125
+\caption@indent=\dimen126
+\caption@parindent=\dimen127
+\caption@hangindent=\dimen128
+)
+\c@ContinuedFloat=\count102
+)
 (/usr/share/texlive/texmf-dist/tex/latex/appendix/appendix.sty
 Package: appendix 2009/09/02 v1.2b extra appendix facilities
-\c@@pps=\count102
-\c@@ppsavesec=\count103
-\c@@ppsaveapp=\count104
+\c@@pps=\count103
+\c@@ppsavesec=\count104
+\c@@ppsaveapp=\count105
 )
 (/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
@@ -273,16 +289,16 @@ LaTeX Font Info:    ... okay on input line 12.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count105
-\scratchdimen=\dimen122
+\scratchcounter=\count106
+\scratchdimen=\dimen129
 \scratchbox=\box28
-\nofMPsegments=\count106
-\nofMParguments=\count107
+\nofMPsegments=\count107
+\nofMParguments=\count108
 \everyMPshowfont=\toks23
-\MPscratchCnt=\count108
-\MPscratchDim=\dimen123
-\MPnumerator=\count109
-\makeMPintoPDFobject=\count110
+\MPscratchCnt=\count109
+\MPscratchDim=\dimen130
+\MPnumerator=\count110
+\makeMPintoPDFobject=\count111
 \everyMPtoPDFconversion=\toks24
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
@@ -370,6 +386,8 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
 <SumVsInt.png, id=1, 462.528pt x 346.896pt>
 File: SumVsInt.png Graphic file (type png)
 <use SumVsInt.png>
@@ -390,19 +408,19 @@ File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 252.
  [5] [6]
-Overfull \hbox (47.7772pt too wide) in paragraph at lines 279--298
+Overfull \hbox (9.56071pt too wide) in paragraph at lines 279--313
 [][] 
  []
 
 [7] (./FortranReport.aux) ) 
 Here is how much of TeX's memory you used:
- 3779 strings out of 494880
- 51612 string characters out of 6179600
- 124635 words of memory out of 5000000
- 7048 multiletter control sequences out of 15000+600000
+ 4839 strings out of 494880
+ 70898 string characters out of 6179600
+ 143593 words of memory out of 5000000
+ 8103 multiletter control sequences out of 15000+600000
  10027 words of font info for 36 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 41i,13n,35p,592b,251s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,13n,39p,598b,351s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/ocean/.texlive2017/texmf-var/fonts/pk/ljfour
 /jknappen/ec/tcrm1200.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
@@ -416,7 +434,7 @@ r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share
 onts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmtt12.pfb>
-Output written on FortranReport.pdf (7 pages, 172152 bytes).
+Output written on FortranReport.pdf (7 pages, 172730 bytes).
 PDF statistics:
  85 PDF objects out of 1000 (max. 8388607)
  59 compressed objects within 1 object stream
