@@ -135,7 +135,7 @@ A better approach is to take the average of the flux at $z$ and $z+\Delta z$
 T_{cool}(z+\Delta z)= T_{cool}(z)+ \bigg(\frac{\big(\frac{A_f q'''(z+\Delta z)}{\pi}\big)+\big(\frac{A_f q'''(z)}{\pi}\big)}{2}\bigg) \pi \frac{\Delta z}{\dot{m}C_p}
 \label{LinearInterp}
 \end{align}
-This more accurately represents the temperature change of the coolant after travelling from $z$ to $\Delta z$; but to keep the program simple the former option was adopted, leading to the result:
+This more accurately represents the temperature change of the coolant after travelling from $z$ to $\Delta z$; but to keep the program simple the former option was adopted. In fact this practice of not interpolating between neighbouring heat flux is common in the field of nuclear engineering thermalhydraulics (See equation [1] in reference \cite{S.Carli} ). This leads to the result:
 
 \begin{itemize}
 	\item[]
@@ -347,8 +347,12 @@ $d_c$	&\texttt{dc}&Outer diameter of cladding&m\\
 \end{appendices}
 
 \begin{thebibliography}{1}
+
 \bibitem{AutoObj}
 Ibm.com. (2018). IBM Knowledge Center. [online] Available at: \url{https://www.ibm.com/support/knowledgecenter/SSGH4D_13.1.0/com.ibm.xlf131.aix.doc/language_ref/autoobj.html} [Accessed 26 Dec. 2018].
+
+\bibitem{S.Carli}
+Carli, S., Pitts, R., Bonnin, X., Subba, F. and Zanino, R. (2018). Effect of strike point displacements on the ITER tungsten divertor heat loads. Nuclear Fusion, [online] 58(12), p.126022. Available at: http://iopscience.iop.org/article/10.1088/1741-4326/aae43f/pdf [Accessed 26 Dec. 2018].
 \end  {thebibliography}
 
 %No matter how many references I have, it is NOT worth it to make a .bib file.

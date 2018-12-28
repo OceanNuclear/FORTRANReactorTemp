@@ -15,7 +15,7 @@ c one-dimensional varibales: temperature and flux arrays
       parameter(arysize=1023) !Allocate fixed amount of memory for array
       double precision Tcool, Tclado, Tcladi, Tfuelo, Tfmax, flux
       double precision q_lin_over_pi,z
-      dimension Tcool(1:arysize+1), Tclado(1:arysize), Tcladi(1:arysize)
+      dimension Tcool(0:arysize), Tclado(1:arysize), Tcladi(1:arysize)
       dimension Tfuelo(1:arysize), Tfmax(1:arysize), flux(1:arysize)
       dimension q_lin_over_pi(1:arysize), z(1:arysize+1)
 
@@ -30,7 +30,8 @@ c Ask for inputs parameters
       outFile=trim(OutFileName(fileName))
       open(o,file=outFile,access='sequential',action='write')
 c Choose reactor type, set inlet coolant temperatures + other global parameters
-      Tcool(1)= Init_params(length)
+      Tcool(0)= Init_params(length)
+      z(1) = 0.0
       write(o,60)"height(m)","T cool", C,"T clad_o", C, "T max",C !Write to file
       write(6,60)"height(m)","T cool",'(C)',"Toc",'(C)',"T max",'(C)' !Write to screen
   60  format(A,T15,A,A,T30,A,A,T45,A,A)
@@ -39,7 +40,7 @@ c Choose reactor type, set inlet coolant temperatures + other global parameters
 c Declaration statement already accounted for extra memory needed
 c to avoid seg fault at full capacity
           call LinearHeatGenOverPi(flux(i),q_lin_over_pi(i)       )
-          call HeatCoolant( Tcool(i),Tcool(i+1), q_lin_over_pi(i) )
+          call HeatCoolant( Tcool(i-1),Tcool(i), q_lin_over_pi(i) )
           call CoolCladding(   Tcool(i),Tclado(i),q_lin_over_pi(i))
           call CoolCladdingIn(Tclado(i),Tcladi(i),q_lin_over_pi(i))
           call CoolFuel(      Tcladi(i),Tfuelo(i),q_lin_over_pi(i))
@@ -73,8 +74,6 @@ c it allows modularity, i.e. max length of fileName in the main program can be m
       integer ios
       logical ex
       print*, "Please enter the file name without '.txt',"
-      print*, "enter nothing to use the default value for file name"//
-     >"(flux.txt)"
   50  read(5,*,IOSTAT=ios) fileName
       fileName=trim(fileName)//'.txt'
       inquire(file=fileName, EXIST=ex) !check that file exist
@@ -143,7 +142,8 @@ c Function to modify input file name to get the output filename.
       !warn user of potential overwriting
       inquire(file=trim(OutFileName),EXIST=ex)
       IF (ex) then
-  70      write(*,'(A)') "Overwrite? (y/n)"
+  70      write(*,'(A,A,A)') "Overwrite existing ",trim(OutFileName),
+     >"? (y/n)"
           read(5,*) YN
           IF ((YN=='N').OR.(YN=='n')) then
               STOP
