@@ -1,2 +1,4 @@
 "/Link to FortranLearning"
 *.aux
+*.log
+*.out
