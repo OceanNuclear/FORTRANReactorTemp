@@ -1,15 +1,3 @@
-# Analytics
-|		   |lines of code	|Comment	|total	|
-|------------------|------------|-------|-------|
-|T_profile.f	   |244		|48	|321	|
-|FortranReport.tex |275		|12	|336	|
-|Excess		   |12.7%	|	|4.67%	|
-
-|		   |words	|char |
-|------------------|------------|-----|
-|FortranReport.tex |2985,	|18196|
-|FortranReport.pdf |2283,	|13243|
-
 # Grade
 |Marking Criteria|Weight|Mark out of 10| Mark (%)|
 |----------------|------|--------------|---------|
@@ -32,3 +20,14 @@ It would be nice if the user were asked if they wanted to use the default output
 The results are excellent, and agree with mine to a good level of precision. The report gives very good information on the structure and function of your code. The methodology is explained clearly, and the details of potential error sources described.
 
 However, it would have been useful to present the results. Graphs showing the temperature distributions would have shown them well, while the actual values could have been given in a table in an appendix.
+
+# Analytics
+|		   |lines of code	|Comment	|total	|
+|------------------|------------|-------|-------|
+|T_profile.f	   |244		|48	|321	|
+|FortranReport.tex |275		|12	|336	|
+
+|		   |words	|char |
+|------------------|------------|-----|
+|FortranReport.tex |2985,	|18196|
+|FortranReport.pdf |2283,	|13243|
