@@ -5,6 +5,8 @@
 |Control & Ease of Use|10%|     8      |     8   |
 |Results         |  20% |      10      |    20   |
 |Report          |  30% |       8      |    24   |
+|----------------|------|--------------|---------|
+|Total           |      |              |    88   |
 
 # Comments from Marker
 (David Forest, University of Birmingham Physics and Astronomy)
